@@ -13,10 +13,12 @@ components:
   multi_agent: false
   verifier: false
 data:
-  dev_path: data/dev_150.jsonl
+  # Bundled sample (20 original questions, not the official benchmark) so
+  # the pipeline runs with zero downloads. Run data/prepare_medqa.py and
+  # switch this to data/dev_150.jsonl once you have the real dataset.
+  dev_path: data/sample_dev.jsonl
   test_path: data/official_test.jsonl
 eval:
   official_run: false
   checkpoint_every: 20
   output_path: predictions/v0_baseline.jsonl
-
