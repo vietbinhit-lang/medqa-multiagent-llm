@@ -1,0 +1,12 @@
+# Lightweight requirements for the Streamlit Cloud deployment. This app
+# never serves an LLM itself (no vllm/transformers/accelerate/bitsandbytes
+# here) - it only talks to a user-supplied OpenAI-compatible endpoint.
+streamlit
+openai
+pyyaml
+numpy
+pandas
+sentence-transformers
+faiss-cpu
+scikit-learn
+statsmodels
