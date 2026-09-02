@@ -1,0 +1,33 @@
+variant: V4_full_no_verifier
+model:
+  name: qwen2.5-7b-instruct
+  backend: vllm
+  base_url: http://localhost:8000/v1
+  temperature: 0.0
+  max_tokens: 512
+  seed: 42
+components:
+  rag: true
+  short_term_memory: true
+  long_term_memory: true
+  multi_agent: true
+  num_agents: 3
+  verifier: false
+rag:
+  # Bundled sample (20 short original passages, not a real reference
+  # corpus) so retrieval is smoke-testable with zero downloads. Run
+  # rag/prepare_corpus.py and switch this to rag/corpus/wikipedia/ (or
+  # your own corpus) once you have broader reference material.
+  corpus_path: rag/corpus/sample/
+  embedding_model: BAAI/bge-small-en
+  top_k: 5
+data:
+  # Bundled sample (20 original questions, not the official benchmark) so
+  # the pipeline runs with zero downloads. Run data/prepare_medqa.py and
+  # switch this to data/dev_150.jsonl once you have the real dataset.
+  dev_path: data/sample_dev.jsonl
+  test_path: data/official_test.jsonl
+eval:
+  official_run: false
+  checkpoint_every: 20
+  output_path: predictions/v4_full_no_verifier.jsonl
