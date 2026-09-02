@@ -9,6 +9,10 @@ from pathlib import Path
 import yaml
 from tqdm import tqdm
 
+from agents.orchestrator import Orchestrator
+from memory.memory import LongTermMemory
+from rag.retriever import Retriever
+
 
 def load_config(path: str) -> dict:
     with open(path, "r", encoding="utf-8") as f:
@@ -32,9 +36,29 @@ def load_checkpoint(output_path: Path) -> dict:
     return done
 
 
-def run_single_question(question: dict, config: dict) -> dict:
-    # TODO: wire this up to agents/orchestrator.py once the agent pipeline exists.
-    raise NotImplementedError("Implement the call into your agent pipeline here.")
+def build_orchestrator(config: dict) -> Orchestrator:
+    """Build the Orchestrator once per run so the RAG index and long-term
+    memory are shared across all questions instead of rebuilt per question.
+    """
+    retriever = None
+    if config["components"].get("rag"):
+        rag_cfg = config.get("rag", {})
+        retriever = Retriever(
+            corpus_path=rag_cfg.get("corpus_path", "rag/corpus/"),
+            embedding_model=rag_cfg.get("embedding_model", "BAAI/bge-small-en"),
+            top_k=rag_cfg.get("top_k", 5),
+        )
+        retriever.build_index()
+
+    long_term_memory = None
+    if config["components"].get("long_term_memory"):
+        long_term_memory = LongTermMemory()
+
+    return Orchestrator(config, retriever=retriever, long_term_memory=long_term_memory)
+
+
+def run_single_question(question: dict, orchestrator: Orchestrator) -> dict:
+    return orchestrator.run(question)
 
 
 def main():
@@ -47,6 +71,8 @@ def main():
     data_path = config["data"]["test_path"] if args.official else config["data"]["dev_path"]
     questions = load_questions(data_path)
 
+    orchestrator = build_orchestrator(config)
+
     output_path = Path(config["eval"]["output_path"])
     output_path.parent.mkdir(parents=True, exist_ok=True)
     done = load_checkpoint(output_path)
@@ -56,7 +82,7 @@ def main():
         for i, q in enumerate(tqdm(questions)):
             if q["id"] in done:
                 continue
-            result = run_single_question(q, config)
+            result = run_single_question(q, orchestrator)
             f.write(json.dumps(result) + "\n")
             if (i + 1) % checkpoint_every == 0:
                 f.flush()
@@ -66,4 +92,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
