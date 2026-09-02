@@ -6,10 +6,10 @@ Midterm project: a medical multi-agent LLM system for factual accuracy on MedQA-
 
 configs/      YAML configs per variant (V0-V4): model, temperature, seed, retrieval settings
 agents/       agent implementations (reasoning agent, verifier, orchestrator)
-rag/          retrieval module (index builder, retriever)
+rag/          retrieval module (index builder, retriever, sample + real corpus prep)
 memory/       short-term and long-term memory
 eval/         evaluation pipeline (run_eval.py, metrics.py)
-data/         dev split only (100-150 questions) - official test set is NOT stored here
+data/         sample_dev.jsonl (bundled, original) + prepare_medqa.py for the real dev/test splits - official test set is NOT stored here
 predictions/  output predictions per variant, per run
 results/      leaderboard, paired comparison, error analysis tables
 report/       midterm report source
@@ -34,6 +34,13 @@ notebooks/    colab_runner.ipynb - clones this repo and runs eval on Colab
 
 On Colab: open notebooks/colab_runner.ipynb and run the cells in order.
 
+By default, `configs/v0_baseline.yaml` and `configs/v3_full.yaml` point at
+the bundled `data/sample_dev.jsonl` (20 original questions) and
+`rag/corpus/sample/` (20 original passages), so the quickstart above runs
+end-to-end with zero downloads. See `data/README.md` and `rag/README.md`
+for how to swap in the real MedQA-USMLE dataset and a larger reference
+corpus once you're ready for an actual evaluation.
+
 ## Evaluation protocol
 
 - Dev set (100-150 questions): debugging and tuning only.
@@ -46,4 +53,8 @@ This project runs an open-weight LLM locally (via vLLM or Ollama) exposed throug
 
 ## Status
 
-Work in progress - midterm project for mon hoc cua thay Le Kim Hung.
+- Multi-agent orchestrator (reasoning + critic + verifier agents), RAG retriever, and short/long-term memory are implemented and verified with mocked-LLM smoke tests (see agents/README.md).
+- Bundled sample data (`data/sample_dev.jsonl`) and sample RAG corpus (`rag/corpus/sample/`) let every variant run end-to-end with zero downloads; `data/prepare_medqa.py` and `rag/prepare_corpus.py` build the real dataset and a larger corpus when you have internet access.
+- Still to do: run V0-V4 on the official test set with a served local LLM, and fill in `results/` and `report/`.
+
+Midterm project for mon hoc cua thay Le Kim Hung.
