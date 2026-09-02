@@ -1,0 +1,33 @@
+# One Wikipedia article title per line. Lines starting with # are ignored.
+# Starter list of general medical topics matching the sample_dev.jsonl
+# question set. Extend this freely for broader coverage.
+Myocardial infarction
+Diabetic ketoacidosis
+Community-acquired pneumonia
+Chronic obstructive pulmonary disease
+Peptic ulcer disease
+Helicobacter pylori
+Hyperkalemia
+Iron-deficiency anemia
+Stroke
+Major depressive disorder
+Pre-eclampsia
+Febrile seizure
+Psoriasis
+Gout
+Anaphylaxis
+Warfarin
+Atrial fibrillation
+Pneumothorax
+Hypothyroidism
+Urinary tract infection
+Acute pancreatitis
+Aspirin
+Antibiotic
+Corticosteroid
+Insulin
+Beta blocker
+Proton-pump inhibitor
+Anticoagulant
+Epinephrine
+Thrombolysis
