@@ -4,10 +4,17 @@ disconnect doesn't force re-running the official test set from scratch.
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 import yaml
 from tqdm import tqdm
+
+# Make the repo root importable regardless of the working directory this
+# script is invoked from (e.g. `python eval/run_eval.py` from the repo
+# root, as the README's quickstart shows) - eval/ is a sibling of
+# agents/, memory/, and rag/, so it is not on sys.path by default.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from agents.orchestrator import Orchestrator
 from memory.memory import LongTermMemory
