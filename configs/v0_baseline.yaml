@@ -1,0 +1,22 @@
+variant: V0_direct_llm
+model:
+  name: qwen2.5-7b-instruct
+  backend: vllm
+  base_url: http://localhost:8000/v1
+  temperature: 0.0
+  max_tokens: 512
+  seed: 42
+components:
+  rag: false
+  short_term_memory: false
+  long_term_memory: false
+  multi_agent: false
+  verifier: false
+data:
+  dev_path: data/dev_150.jsonl
+  test_path: data/official_test.jsonl
+eval:
+  official_run: false
+  checkpoint_every: 20
+  output_path: predictions/v0_baseline.jsonl
+
