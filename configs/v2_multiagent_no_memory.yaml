@@ -1,0 +1,25 @@
+variant: V2_multiagent_no_memory
+model:
+  name: qwen2.5-7b-instruct
+  backend: vllm
+  base_url: http://localhost:8000/v1
+  temperature: 0.0
+  max_tokens: 512
+  seed: 42
+components:
+  rag: false
+  short_term_memory: false
+  long_term_memory: false
+  multi_agent: true
+  num_agents: 3
+  verifier: true
+data:
+  # Bundled sample (20 original questions, not the official benchmark) so
+  # the pipeline runs with zero downloads. Run data/prepare_medqa.py and
+  # switch this to data/dev_150.jsonl once you have the real dataset.
+  dev_path: data/sample_dev.jsonl
+  test_path: data/official_test.jsonl
+eval:
+  official_run: false
+  checkpoint_every: 20
+  output_path: predictions/v2_multiagent_no_memory.jsonl
