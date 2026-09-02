@@ -14,7 +14,11 @@ components:
   num_agents: 3
   verifier: true
 rag:
-  corpus_path: rag/corpus/
+  # Bundled sample (20 short original passages, not a real reference
+  # corpus) so retrieval is smoke-testable with zero downloads. Run
+  # rag/prepare_corpus.py and switch this to rag/corpus/wikipedia/ (or
+  # your own corpus) once you have broader reference material.
+  corpus_path: rag/corpus/sample/
   embedding_model: BAAI/bge-small-en
   top_k: 5
 data:
